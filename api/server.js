@@ -57,16 +57,17 @@ server.post('/api/users', async (req, res) => {
 
 // *** PUT REQUEST ***
 
-server.put('/api/users/:id'), async (req, res) => {
+server.put('/api/users/:id', async (req, res) => {
     const user = req.body;
     const { id } = req.params;
-
-    if (!user.name || user.bio) {
+    console.log('updateUser')
+    if (!user.name || !user.bio) {
         res.status(400).json({ message: "Please provide name and bio for the user" })
     } else {
 
         try {
             const updateUser = await users.update(id, user);
+            console.log(updateUser)
             if (updateUser) {
                 res.json(updateUser);
             } else {
@@ -77,14 +78,14 @@ server.put('/api/users/:id'), async (req, res) => {
             res.status(500).json({ message: "The user information could not be modified" })
         }
     }
-}
+})
 
 // *** DELETE REQUEST ***
 
 server.delete('/api/users/:id', async (req, res) => {
     const { id } = req.params;
     try {
-        const user = await users.delete(id);
+        const user = await users.remove(id);
         if (user) {
             res.json(user);
         } else {
